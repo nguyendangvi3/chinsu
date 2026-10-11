@@ -56,9 +56,9 @@ td.ln{min-width:0}.tw{overflow-x:visible}
 }
 </style></head><body><div class="w">
 <h1>TLTB &amp; Hội viên – Kế hoạch bán hàng ngày · Kỳ 10/2026</h1>
-<div class="sub">Doanh số = tất cả đơn (Invoiced, Shipped, Promotion Applied; sau chiết khấu), đơn hàng đến 09/10/2026 · Danh sách khách theo chương trình lấy từ file TLTB, Hội viên doanh nhân (HVDN) và tracking combo · Thứ bán và tuần lẻ/chẵn theo MCP (tuần này là tuần lẻ)</div>
+<div class="sub">Doanh số = tất cả đơn (Invoiced, Shipped, Promotion Applied; sau chiết khấu), đơn hàng đến 09/10/2026 · Danh sách khách theo chương trình lấy từ file TLTB, Hội viên doanh nhân (HVDN) và tracking combo · Thứ bán và tuần lẻ/chẵn theo MCP, chọn tuần ở ô lọc Tuần</div>
 <div class="bar"><div class="tabs"><button id="m-plan" class="on">Kế hoạch ngày</button> <button id="m-ov">Tổng quan</button> <button id="m-cb">Combo OFF</button></div>
-<select id="f-sm"></select><select id="f-day"></select><select id="f-grp"></select><select id="f-pr"></select><select id="f-st"><option value="">Tất cả trạng thái</option><option value="ok">✔ Đã đạt</option><option value="near">◐ Gần đạt (≥ 50% ngưỡng)</option><option value="sell">Đang bán</option><option value="zero">Chưa phát sinh</option></select><input type="text" id="q" placeholder="Tìm tên / mã outlet…"><label class="ck"><input type="checkbox" id="ck-z"> Hiện cả khách Gắn kết / Trọng điểm chưa phát sinh</label></div>
+<select id="f-sm"></select><select id="f-wk"></select><select id="f-day"></select><select id="f-grp"></select><select id="f-pr"></select><select id="f-st"><option value="">Tất cả trạng thái</option><option value="ok">✔ Đã đạt</option><option value="near">◐ Gần đạt (≥ 50% ngưỡng)</option><option value="sell">Đang bán</option><option value="zero">Chưa phát sinh</option></select><input type="text" id="q" placeholder="Tìm tên / mã outlet…"><label class="ck"><input type="checkbox" id="ck-z"> Hiện cả khách Gắn kết / Trọng điểm chưa phát sinh</label></div>
 <div id="plan"></div>
 <div id="cbv" style="display:none"></div>
 <div id="ov" style="display:none">
@@ -90,7 +90,7 @@ const ORD={tb:[0,6,5,4,3,7,8,10,9,11],td:[12,13,14],gk:[1,2]};
 const ST={ok:['✔ Đạt','#12a150'],near:['◐ Gần đạt','#c98a00'],sell:['Đang bán','#2a6fdb'],zero:['Chưa phát sinh','#8a94a0']};
 const AC=['#2a6fdb','#12a150','#c98a00','#e8590c','#7a52d1','#0e9aa7','#d8232a'];
 const $=id=>document.getElementById(id),dw=new Date().getDay();
-const S={mode:'plan',sm:'',day:dw>=1?'T'+(dw+1):'',grp:'',pr:'',st:'',q:'',z:false};
+const S={mode:'plan',wk:dw==0?1:0,sm:'',day:dw>=1?'T'+(dw+1):'T2',grp:'',pr:'',st:'',q:'',z:false};
 const esc=s=>String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;');
 const fm=v=>v>=1e9?(v/1e9).toFixed(2)+' tỷ':v>=1e6?(v/1e6).toFixed(1)+' tr':Math.round(v/1e3)+' k';
 const vnd=v=>Math.round(v).toLocaleString('vi-VN')+' đ',pc=(a,b)=>b?(100*a/b).toFixed(1)+'%':'–',dn=d=>d?'Thứ '+d.slice(1):'tất cả thứ bán';
@@ -103,6 +103,7 @@ opt($('f-sm'),D.sm.map((s,i)=>'<option value="'+i+'">'+esc(s)+'</option>').join(
 opt($('f-day'),['T2','T3','T4','T5','T6','T7'].map(d=>'<option value="'+d+'">'+dn(d)+'</option>').join(''),'Tất cả thứ bán');$('f-day').value=S.day;
 opt($('f-grp'),['tb','td','gk','hv','cb'].map(g=>'<option value="'+g+'">'+GR[g]+'</option>').join(''),'Tất cả nhóm chương trình');
 opt($('f-pr'),['tb','td','gk'].map(g=>'<optgroup label="'+GR[g]+'">'+ORD[g].map(i=>'<option value="'+i+'">'+esc(PR[i].n)+'</option>').join('')+'</optgroup>').join(''),'Tất cả chương trình');
+const wkLabel=k=>{const m=addD(week0(),7*k);return (k?'Tuần sau':'Tuần này')+' · '+(oddOf(m)=='O'?'lẻ':'chẵn')+' '+dm(m)};
 const dayOK=r=>!S.day||schedDay(r.o,S.day);
 const base=r=>(S.sm===''||r.sm==S.sm)&&(!S.q||r.nm.toLowerCase().includes(S.q)||r.code.includes(S.q))&&dayOK(r)&&(!S.grp||r.g==S.grp);
 const agg=L=>{const a={n:L.length,ok:0,near:0,sell:0,zero:0,gap:0,rw:0,fr:0};L.forEach(r=>{a[r.k]++;if(r.k=='near'||r.k=='sell')a.gap+=r.gap;a.rw+=r.rw;a.fr+=r.fr});return a};
@@ -125,7 +126,9 @@ const addD=(s,n)=>{const d=pd_(s);d.setDate(d.getDate()+n);return iso(d)};
 const wcode=s=>{const g=pd_(s).getDay();return g?'T'+(g+1):'CN'};
 const dm=s=>{const a=s.split('-');return a[2]+'/'+a[1]};
 const oddOf=s=>{const a=pd_(s),b=pd_(D.week0),m=new Date(a);m.setDate(m.getDate()-((a.getDay()+6)%7));return Math.round((m-b)/6048e5)%2==0?'O':'E'};
-const curMon=()=>{const x=pd_(addD(D.last,1));x.setDate(x.getDate()-((x.getDay()+6)%7));return iso(x)};
+const todayIso=()=>{const t=iso(new Date());return t>D.last?t:addD(D.last,1)};
+const week0=()=>{const x=pd_(todayIso());x.setDate(x.getDate()-((x.getDay()+6)%7));return iso(x)};
+const curMon=()=>addD(week0(),(S.wk||0)*7);
 const dateOfDay=code=>addD(curMon(),['T2','T3','T4','T5','T6','T7'].indexOf(code));
 const schedOn=(o,s)=>(o[0]||'').split(/(?=T)/).includes(wcode(s))&&(o[3]=='B'||!o[3]||o[3]==oddOf(s));
 const schedDay=(o,d)=>schedOn(o,dateOfDay(d));
@@ -283,6 +286,7 @@ function render(){$('plan').style.display=S.mode=='plan'?'':'none';$('ov').style
 ['sm','day','grp','pr','st'].forEach(k=>$('f-'+k).onchange=e=>{S[k]=e.target.value;if(k=='sm')try{localStorage.setItem('kh_sm',e.target.value)}catch(x){}if(k=='grp'&&S.pr!==''&&S.grp&&PR[S.pr].grp!=S.grp){S.pr='';$('f-pr').value=''}render()});
 $('q').oninput=e=>{S.q=e.target.value.toLowerCase();render()};$('ck-z').onchange=e=>{S.z=e.target.checked;render()};
 $('m-plan').onclick=()=>{S.mode='plan';render()};$('m-ov').onclick=()=>{S.mode='ov';render()};$('m-cb').onclick=()=>{S.mode='cb';render()};
+$('f-wk').innerHTML=[0,1].map(k=>'<option value="'+k+'">'+wkLabel(k)+'</option>').join('');$('f-wk').value=S.wk;$('f-wk').onchange=e=>{S.wk=+e.target.value;render()};
 try{const sv=localStorage.getItem('kh_sm');if(sv!==null&&[...$('f-sm').options].some(o=>o.value==sv)){S.sm=sv;$('f-sm').value=sv}}catch(e){}
 render();
 </script></body></html>
