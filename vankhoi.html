@@ -251,10 +251,10 @@ if(!dsOk)tasks.push('Doanh số còn thiếu <b style="color:#d8232a">'+fm(base-
 if(fReq&&fmiss.length)tasks.push('Duy trì Focus: '+fmiss.map(i=>i[0]+' (thiếu <b style="color:#d8232a">'+fm(TH-i[2])+'</b>)').join(', '));
 if(nReq&&!neuA.length){ig+=cand.length?TH-Math.max(...cand.map(i=>i[2])):TH;tasks.push('Mở mới ≥ 1 ngành/nhãn (≥ 200.000 đ)'+(cand.length?'. Gợi ý: '+cand.map(i=>i[0]+(i[2]>0?' (còn thiếu '+fm(TH-i[2])+')':'')).join(', '):''))}
 const nf=neuA.length+(nReq&&!neuA.length?1:0)+(fReq?foc.length:0),pot=Math.round((rs+Math.max(base-tot,ig))*Math.min(130,50+20*nf)/10000);
-return{tier,pass,tasks,tot,base,need:pass?0:Math.max(base-tot,ig),gapB:pass?0:Math.max(base-tot,0),ig:pass?0:ig,opp:pass?0:pot,bonus:Math.round(rs*pct/10000),pct,req:rq.join(' · '),reqT:rqT.join(' · ')}}
+return{tier,pass,tasks,tot,base,need:pass?0:Math.max(base-tot,ig),gapB:pass?0:Math.max(base-tot,0),ig:pass?0:ig,opp:pass?0:pot,coef:Math.min(130,50+20*nf)/100,rb:Math.round(rs+Math.max(base-tot,ig)),bonus:Math.round(rs*pct/10000),pct,req:rq.join(' · '),reqT:rqT.join(' · ')}}
 function hvLines(c,txt){const e=c.hv;if(!e)return[];
 if(e.pass)return[txt?'   • [HV] ✔ '+e.tier+': đã đạt chương trình Hội viên, thưởng tạm tính '+vnd(e.bonus):'<div>'+bx('hv')+'<span style="color:#12a150">✔ '+e.tier+': đã đạt chương trình Hội viên, thưởng tạm tính <b>'+vnd(e.bonus)+'</b></span></div>'];
-return e.tasks.map((s,i)=>txt?'   • [HV '+e.tier+'] '+s.replace(/<[^>]+>/g,''):'<div>'+bx('hv')+(i==0?'<b>'+e.tier+'</b> ':'')+s+'</div>')}
+const cf=v=>String(v).replace('.',','),Lt=e.tasks.length-1;return e.tasks.map((s,i)=>{const sx=(i==Lt&&e.opp)?(txt?' → thưởng từ '+vnd(e.opp)+' ('+cf(e.coef)+'% × '+fm(e.rb)+')':' <span style="color:#12a150">→ thưởng từ <b>'+vnd(e.opp)+'</b></span> <span class="n">('+cf(e.coef)+'% × '+fm(e.rb)+')</span>'):'';return txt?'   • [HV '+e.tier+'] '+s.replace(/<[^>]+>/g,'')+sx:'<div>'+bx('hv')+(i==0?'<b>'+e.tier+'</b> ':'')+s+sx+'</div>'})}
 const CKN={HPC:'Hóa mỹ phẩm (trừ NET)',CANU:'Cà phê, Ngũ cốc',BEV:'Nước giải khát',MEAT:'Thịt chế biến',MI:'Mì, Sợi gạo',GV:'Gia vị'};
 const NOSM=D.sm.indexOf('Chưa rõ nhân viên');
 const CBU={};Object.keys(D.cb).forEach(code=>{const e=D.cb[code];CBU[code]={code,nm:e[0],sm:e[1],o:[e[2],e[4],'',e[3],''],tk:e[5],nw:e[6],od:e[7],bs:e[8]}});
