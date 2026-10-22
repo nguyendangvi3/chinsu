@@ -254,7 +254,7 @@ if(fReq&&fmiss.length)tasks.push('Duy trì Focus: '+fmiss.map(i=>i[0]+' (thiếu
 if(nReq&&!neuA.length){ig+=cand.length?TH-Math.max(...cand.map(i=>i[2])):TH;tasks.push('Mở mới ≥ 1 ngành/nhãn (≥ 200.000 đ)'+(cand.length?'. Gợi ý: '+cand.map(i=>i[0]+(i[2]>0?' (còn thiếu '+fm(TH-i[2])+')':'')).join(', '):''))}
 const nf=neuA.length+(nReq&&!neuA.length?1:0)+(fReq?foc.length:0),pot=Math.round((rs+Math.max(base-tot,ig))*Math.min(130,50+20*nf)/10000);
 const rbX=Math.round(rs+(pass?0:Math.max(base-tot,ig))),room=Math.max(0,Math.round((130-Math.min(130,50+20*nf))/20)),xs=(room>0&&(neuA.length||!nReq)&&cand.length)?{names:cand.map(i=>i[0]),v:Math.round(rbX*0.002)}:null;
-return{xs,neuL:neuA.map(i=>[i[0],i[2]]),tier,pass,tasks,tot,base,need:pass?0:Math.max(base-tot,ig),gapB:pass?0:Math.max(base-tot,0),ig:pass?0:ig,opp:pass?0:pot,coef:Math.min(130,50+20*nf)/100,rb:Math.round(rs+Math.max(base-tot,ig)),bonus:Math.round(rs*pct/10000),pct,req:rq.join(' · '),reqT:rqT.join(' · ')}}
+return{xs,c5:it.filter(i=>i[1]==0&&i[2]<TH).sort((a,b)=>b[3]-a[3]||b[2]-a[2]).slice(0,5).map(i=>[i[0],i[2],i[3]]),neuL:neuA.map(i=>[i[0],i[2]]),tier,pass,tasks,tot,base,need:pass?0:Math.max(base-tot,ig),gapB:pass?0:Math.max(base-tot,0),ig:pass?0:ig,opp:pass?0:pot,coef:Math.min(130,50+20*nf)/100,rb:Math.round(rs+Math.max(base-tot,ig)),bonus:Math.round(rs*pct/10000),pct,req:rq.join(' · '),reqT:rqT.join(' · ')}}
 function hvLines(c,txt){const e=c.hv,L=hvLines0(c,txt);if(!e)return L;const rem=Math.max(e.base-e.tot,0),cf=v=>String(v).replace('.',','),tr=e.tier.slice(-1);
 let sfx='';
 if(!e.pass&&rem>0&&e.tasks.length){L.shift();if(e.tasks.length==1&&e.opp)sfx=txt?' → thưởng từ '+vnd(e.opp)+' ('+cf(e.coef)+'% × '+fm(e.rb)+')':' <span style="color:#12a150">→ thưởng từ <b>'+vnd(e.opp)+'</b></span> <span class="n">('+cf(e.coef)+'% × '+fm(e.rb)+')</span>'}
@@ -493,7 +493,7 @@ const chip=(i)=>{const ok=i[2]>=TH,tag=i[1]==2?'Focus':'Mới',c=ok?'#12a150':(i
 const wc='text-align:left;white-space:normal;min-width:170px';
 const row=(x,k)=>{const e=x.e,it=x.it,tr=e.tier.slice(-1),foc=it.filter(i=>i[1]==2),fo=foc.filter(i=>i[2]>=TH),neu=it.filter(i=>i[1]==0&&i[2]>=TH),rem=Math.max(e.base-e.tot,0);
 const dt=tr=='1'?'<span style="color:var(--mu)">Không yêu cầu</span>':(foc.length?'<b>'+fo.length+'/'+foc.length+'</b>: '+foc.map(i=>i[2]>=TH?'<span style="color:#12a150">✔ '+esc(i[0])+'</span>':'<span style="color:#d8232a">'+esc(i[0])+' (thiếu '+fm(TH-i[2])+')</span>').join(', '):'–');
-const mm=neu.length?'<b>'+neu.length+'</b>: '+neu.map(i=>esc(i[0])+' ('+fm(i[2])+')').join(', '):(tr=='2'?'<span style="color:var(--mu)">Không bắt buộc</span>':'<span style="color:#d8232a">Chưa mở</span>');
+const mm=neu.length?'<b>'+neu.length+'</b>: '+neu.map(i=>esc(i[0])+' ('+fm(i[2])+')').join(', '):(tr=='2'?'<span style="color:var(--mu)">Không bắt buộc</span>':'<b style="color:#d8232a">Chưa mở</b>'+((e.c5||[]).length?'<br><small>Gợi ý: '+e.c5.map(i=>esc(i[0])+(i[1]>0?' (còn thiếu '+fm(TH-i[1])+')':'')).join(', ')+'</small>':''));
 const kl=e.pass?'<span style="color:#12a150"><b>✔ Đạt</b></span><br>Thưởng <b>'+vnd(e.bonus)+'</b> <small style="color:var(--mu)">('+Math.round(e.pct)+'%)</small>':'<b style="color:#d8232a">Chưa đạt</b>'+(e.opp?'<br><small style="color:var(--mu)">thưởng nếu đạt ≈ '+vnd(e.opp)+'</small>':'');
 const vc=e.pass?(e.xs?'Mở thêm ngành/nhãn mới (≥ 200 k): <b>'+e.xs.names.map(esc).join(', ')+'</b> → +0,2% mỗi ngành (≈ +'+vnd(e.xs.v)+')':'–'):e.tasks.join('<br>');
 const dtl=x.u.o[0].replace(/T(\d)/g,'T$1 ').trim().split(' ').join(' · ');
