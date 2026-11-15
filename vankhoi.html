@@ -178,11 +178,11 @@ const bx=g=>'<span class="bx" style="background:'+GC[g]+'">'+GT[g]+'</span>';
 function copyTxt(txt,i){const box=$('ta'+i),fb=()=>{box.innerHTML='<textarea readonly style="width:100%;height:170px;font:inherit;background:var(--card);color:var(--tx);border:1px solid var(--bd);border-radius:8px;padding:8px">'+esc(txt)+'</textarea><div class="n">Bấm vào ô, Ctrl+A rồi Ctrl+C để sao chép.</div>';const t=box.querySelector('textarea');t.focus();t.select()};
 try{navigator.clipboard.writeText(txt).then(()=>{box.innerHTML='<div class="n" style="color:#12a150">✔ Đã sao chép kế hoạch</div>'},fb)}catch(e){fb()}}
 const TX={};
-function lineOf(r,txt){const p=PR[r.pi],lb=p.lab||p.n,sfx=p.lab?'':' ('+(p.gl||p.g)+')';let s;const tea=false,ot=tea?' <span style="color:#c2255c"><b>+ Ontop 1 thùng nhựa 30 lít</b></span> <small style="color:var(--mu)">(Nhớ ĐK tích lũy)</small>':'',ott=tea?' + Ontop 1 thùng nhựa 30 lít (Nhớ ĐK tích lũy)':'';
+function lineOf(r,txt){const p=PR[r.pi],lb=p.lab||p.n,pk=(p.flat||p.grp=='tb')?'':String(p.k).replace('.',',')+'%',pp=pk?' <b style="color:#d8232a">'+pk+'</b>':'',ppt=pk?' '+pk:'',sfx=p.lab?'':' ('+(p.gl||p.g)+')';let s;const tea=false,ot=tea?' <span style="color:#c2255c"><b>+ Ontop 1 thùng nhựa 30 lít</b></span> <small style="color:var(--mu)">(Nhớ ĐK tích lũy)</small>':'',ott=tea?' + Ontop 1 thùng nhựa 30 lít (Nhớ ĐK tích lũy)':'';
 if(r.k=='ok'){const cap=p.flat?0:tcap(p),rem=cap?cap-r.ds:0,up=p.flat?'':(cap&&rem<=0)?' · đã đạt mức thưởng tối đa':(cap&&rem<1e6)?' · còn '+fm(rem)+' để tối đa '+vnd(p.cap/100):' · bán thêm 1 tr được +'+vnd(p.k*1e4);
-s=txt?'✔ '+lb+': đã đạt, thưởng '+vnd(r.rw)+ott+up:'<span style="color:#12a150">✔ '+esc(lb)+': đã đạt, thưởng <b>'+vnd(r.rw)+'</b>'+ot+up+'</span>'}
+s=txt?'✔ '+lb+ppt+': đã đạt, thưởng '+vnd(r.rw)+ott+up:'<span style="color:#12a150">✔ '+esc(lb)+pp+': đã đạt, thưởng <b>'+vnd(r.rw)+'</b>'+ot+up+'</span>'}
 else{const w=rw(r.mn,p,r.mn),cur=r.ds>0?'đang '+fm(r.ds)+'/'+fm(r.mn):'chưa phát sinh',nt=p.f?' (nền tảng '+fm(r.b)+' ×'+Math.round(p.f*100)+'%)':'';
-s=txt?lb+': '+cur+nt+' → cần thêm '+fm(r.gap)+sfx+' → thưởng '+vnd(w)+ott:esc(lb)+': '+cur+(nt?' <small style="color:var(--mu)">'+nt+'</small>':'')+' → cần thêm <b style="color:#d8232a">'+fm(r.gap)+'</b>'+(sfx?' <small style="color:var(--mu)">'+sfx+'</small>':'')+' → thưởng <b style="color:#12a150">'+vnd(w)+'</b>'+ot+(r.k=='near'?' <small style="color:#c98a00"><b>◐ gần đạt</b></small>':'')}
+s=txt?lb+ppt+': '+cur+nt+' → cần thêm '+fm(r.gap)+sfx+' → thưởng '+vnd(w)+ott:esc(lb)+pp+': '+cur+(nt?' <small style="color:var(--mu)">'+nt+'</small>':'')+' → cần thêm <b style="color:#d8232a">'+fm(r.gap)+'</b>'+(sfx?' <small style="color:var(--mu)">'+sfx+'</small>':'')+' → thưởng <b style="color:#12a150">'+vnd(w)+'</b>'+ot+(r.k=='near'?' <small style="color:#c98a00"><b>◐ gần đạt</b></small>':'')}
 return txt?'   • ['+GT[p.grp]+'] '+s:'<div>'+bx(p.grp)+s+'</div>'}
 
 const dropT=r=>r.pi==2&&r.o[5]=='N'&&r.ds==0;
