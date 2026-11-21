@@ -112,6 +112,23 @@ table.hvt th:nth-child(6){width:15%}table.hvt th:nth-child(7){width:14%}table.hv
 table.hvt td span[style*="border-radius:99px"]{font-size:12.5px!important;padding:0 6px!important;margin:1px 3px 1px 0!important}
 }
 #m-cn{color:#d8232a!important;font-weight:900!important;border-top:3px solid #d8232a!important}#m-cn.on{background:#d8232a!important;color:#fff!important}
+</style>
+<style id="cnmob">
+@media(max-width:720px){
+table.pt.cn tr{display:grid;grid-template-columns:24px minmax(0,1fr) minmax(0,1fr) auto;gap:8px 10px;align-items:start;padding:12px;border-left:4px solid #d8232a}
+table.pt.cn td{min-width:0!important;font-size:14.5px}
+table.pt.cn td:nth-child(1){grid-column:1;grid-row:1;font-size:15px;line-height:1.3}
+table.pt.cn td:nth-child(2){grid-column:2/4;grid-row:1;font-size:15.5px;line-height:1.3}
+table.pt.cn td:nth-child(3){grid-column:4;grid-row:1;font-weight:800;background:#d8232a;color:#fff!important;border-radius:6px;padding:1px 9px;font-size:14px}
+table.pt.cn td:nth-child(4){grid-column:1/3;grid-row:2;background:color-mix(in srgb,#d8232a 9%,var(--card));border-radius:8px;padding:7px 9px}
+table.pt.cn td:nth-child(6){grid-column:3/5;grid-row:2;background:color-mix(in srgb,var(--tx) 6%,var(--card));border-radius:8px;padding:7px 9px}
+table.pt.cn td:nth-child(5){grid-column:1/5;grid-row:3;background:none;border-radius:0;padding:8px 0 0;border-top:1px dashed var(--bd);line-height:1.5}
+table.pt.cn td:nth-child(5)::before{content:"Việc cần làm & cơ hội";display:block;font-size:11.5px;color:var(--mu);font-weight:700;margin-bottom:4px}
+table.pt.cn td:nth-child(7){grid-column:1/5;grid-row:4;display:flex;flex-wrap:wrap;align-items:baseline;gap:2px 16px;border-top:1px dashed var(--bd);padding-top:8px}
+table.pt.cn td:nth-child(7)::before{flex:1 1 100%}
+table.pt.cn td:nth-child(7) div{border:0!important;margin:0!important;padding:0!important}
+table.pt.cn td:nth-child(7) small{flex:1 1 100%}
+}
 </style></head><body><div class="w">
 <header class="hd"><div><h1>ĐI ĐÂU - LÀM GÌ - MANG GÌ VỀ CHO TỔ CHỨC</h1><div class="upd">Đơn hàng đến <b id="upd">–</b></div></div></header>
 <div class="fl">
@@ -422,7 +439,7 @@ h+=ks.map((k,si)=>{const ON=c=>D.o[c.code]&&D.o[c.code][5]=='N'?1:0,FQ=c=>({F8:3
 const kc=L.reduce((a,c)=>a+CNS[c.code][0],0);let tx='🔴 TĂNG CƯỜNG CHỦ NHẬT – '+D.sm[k]+'\nTổng '+L.length+' khách · kế hoạch CN '+vnd(kc)+' · cần thêm '+fm(nd)+' doanh số · thưởng đã đạt '+vnd(gt)+' · chưa đạt '+vnd(op)+' · tổng '+vnd(gt+op)+'\n';
 L.forEach((c,i)=>{tx+='\n'+(i+1)+'. '+c.nm+' ('+c.code+')'+(c.o[1]?' – '+c.o[1]:'')+' – '+(c.o[0]||'?')+' · KH CN '+vnd(CNS[c.code][0])+'\n'+c.rows.map(r=>lineOf(r,1)).concat(hvLines(c,1)).concat(cbLines(c,1)).concat(coLines(c,1)).concat(hmLines(c,1)).concat(capLine(c,1)).join('\n')});
 TX[si]=tx;
-return'<details open class="card" style="margin-bottom:10px;border:2px solid #d8232a"><summary><span class="sn">'+esc(D.sm[k])+'</span><span class="pill sp w3" style="border:2px solid #d8232a;color:#d8232a;font-weight:800">'+L.length+' khách</span><span style="font-weight:500;font-size:15px">· <b style="color:#d8232a">KH CN '+vnd(kc)+'</b> · cần thêm <b>'+fm(nd)+'</b> · đã đạt <b style="color:#12a150">'+vnd(gt)+'</b> · chưa đạt <b style="color:#c98a00">'+vnd(op)+'</b> · tổng <b>'+vnd(gt+op)+'</b>'+(nh?' · '+bx('hv')+nh+' khách Hội viên':'')+'</span></summary><div id="ta'+si+'"></div><div class="tw"><table class="pt"><tr><th>#</th><th>Khách hàng</th><th>Thứ bán</th><th>Kế hoạch tăng cường CN</th><th style="text-align:left">Việc cần làm &amp; cơ hội</th><th>Cần thêm</th><th>Thưởng cơ hội</th></tr>'+
+return'<details open class="card" style="margin-bottom:10px;border:2px solid #d8232a"><summary><span class="sn">'+esc(D.sm[k])+'</span><span class="pill sp w3" style="border:2px solid #d8232a;color:#d8232a;font-weight:800">'+L.length+' khách</span><span style="font-weight:500;font-size:15px">· <b style="color:#d8232a">KH CN '+vnd(kc)+'</b> · cần thêm <b>'+fm(nd)+'</b> · đã đạt <b style="color:#12a150">'+vnd(gt)+'</b> · chưa đạt <b style="color:#c98a00">'+vnd(op)+'</b> · tổng <b>'+vnd(gt+op)+'</b>'+(nh?' · '+bx('hv')+nh+' khách Hội viên':'')+'</span></summary><div id="ta'+si+'"></div><div class="tw"><table class="pt cn"><tr><th>#</th><th>Khách hàng</th><th>Thứ bán</th><th>Kế hoạch tăng cường CN</th><th style="text-align:left">Việc cần làm &amp; cơ hội</th><th>Cần thêm</th><th>Thưởng cơ hội</th></tr>'+
 L.map((c,i)=>'<tr><td>'+(i+1)+'</td><td style="white-space:normal;min-width:190px"><b>'+esc(c.nm)+'</b> <small style="color:var(--mu)">'+c.code+'</small>'+(c.hv?' '+bx('hv')+'<small>'+c.hv.tier+'</small>':'')+'<br><small style="color:var(--mu)">'+esc(c.o[1])+'</small></td><td>'+(c.o[0]||'–')+'</td><td data-l="Kế hoạch tăng cường CN"><b style="color:#d8232a;font-size:15px">'+vnd(CNS[c.code][0])+'</b><br><small style="color:#d8232a;font-weight:700">'+Math.round(CNS[c.code][1]*100)+'% CT Mức 3</small>'+(CNS[c.code][2]?'<br><small style="color:var(--mu)">bổ sung ngoài rule</small>':'')+'</td><td class="ln">'+c.rows.map(r=>lineOf(r,0)).join('')+hvLines(c,0).join('')+cbLines(c,0).join('')+coLines(c,0).join('')+hmLines(c,0).join('')+capLine(c,0).join('')+'</td><td data-l="Cần thêm"><b style="color:#d8232a">'+fm(c.tneed)+'</b>'+(c.need&&c.needH?'<br><small style="color:var(--mu)">Gắn kết '+fm(c.need)+'<br>HV '+fm(c.needH)+'<br>(tính chung)</small>':'')+'</td><td data-l="Thưởng cơ hội"><div>Đã đạt: <b style="color:#12a150">'+vnd(c.gotT)+'</b></div><div>Chưa đạt: <b style="color:#c98a00">'+vnd(c.topp)+'</b></div>'+(c.opp&&c.oppH?'<small style="color:var(--mu)">(Gắn kết '+vnd(c.opp)+' · HV '+vnd(c.oppH)+')</small>':'')+'<div style="border-top:1px solid #9994;margin-top:3px;padding-top:3px">Tổng: <b>'+vnd(c.gotT+c.topp)+'</b></div></td></tr>').join('')+'</table></div></details>'}).join('')||'<div class="card n">Không có khách cần làm theo bộ lọc hiện tại.</div>';
 if(done.length)h+='<div class="card n" style="font-size:14px"><b>Đã đạt đủ (giữ vững):</b> '+done.slice(0,60).map(c=>esc(c.nm)).join(', ')+(done.length>60?' … và '+(done.length-60)+' khách khác':'')+'</div>';
 $('cnv').innerHTML=h;mobi($('cnv'));$('cnv').querySelectorAll('button[data-c]').forEach(b=>b.onclick=()=>copyTxt(TX[b.dataset.c],b.dataset.c));$('cnv').querySelectorAll('button[data-e]').forEach(b=>b.onclick=e=>{e.preventDefault();const i=1000+ +b.dataset.e;copyTxt(TX[i],i)})}
